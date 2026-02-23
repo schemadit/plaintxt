@@ -1,0 +1,431 @@
+================================================================
+        PC SECURITY DEFENSE GUIDE — 2026 EDITION
+        99.9% Attack Prevention — Full Plaintext Version
+================================================================
+
+MODERN THREAT LANDSCAPE
+------------------------
+- Bootkits / UEFI Malware     → Survives OS reinstall, lives in firmware
+- Session Cookie Theft        → Bypasses passwords and 2FA entirely
+- Infostealers in Cracked SW  → 99% of cracks in 2026 carry payloads
+- Kernel-Level Injectors      → Target unprotected Windows kernels
+- Zero-Click Spyware (Pegasus)→ Infects with ZERO user interaction
+- Commercial Stalkerware      → Remote monitoring via phone/PC access
+
+
+================================================================
+PHASE 1: FIRMWARE FORTRESS + ZERO-CLICK SPYWARE DEFENSE
+================================================================
+
+This is the deepest attack surface. A bootkit here survives a full
+Windows reinstall. Zero-click spyware like Pegasus, Predator, and
+Reign target devices at the OS and network level — with no clicks,
+no downloads, no mistakes on your part required.
+
+
+--- 1A. Close the BlackLotus Bypass (The 0x80 Fix) ---
+
+Microsoft's Secure Boot patch is INACTIVE by default. You must
+manually force revocation of old, vulnerable bootloaders.
+
+Open PowerShell (Admin) and run ALL THREE commands:
+
+  reg add HKLM\SYSTEM\CurrentControlSet\Control\Secureboot /v AvailableUpdates /t REG_DWORD /d 0x40 /f
+
+  reg add HKLM\SYSTEM\CurrentControlSet\Control\Secureboot /v AvailableUpdates /t REG_DWORD /d 0x100 /f
+
+  reg add HKLM\SYSTEM\CurrentControlSet\Control\Secureboot /v AvailableUpdates /t REG_DWORD /d 0x80 /f
+
+Restart your PC TWICE after running all three.
+
+Result: Windows now rejects the cryptographic keys used by
+BlackLotus, CosmicStrand, and related UEFI bootkits.
+
+
+--- 1B. Lock the BIOS/UEFI ---
+
+Even perfect OS security fails if malware can reach into BIOS and
+disable Secure Boot. A Supervisor Password blocks this.
+
+  - Enter BIOS/UEFI at startup (usually F2, DEL, or F10)
+  - Security → Set a Supervisor/Administrator Password
+  - Confirm Secure Boot is ON (Standard or Custom mode)
+  - Confirm TPM 2.0 is ON and Active
+  - Disable boot from USB/network unless you specifically need it
+
+WARNING: Without a BIOS password, deep malware can disable Secure
+Boot and install itself before Windows even loads.
+
+
+--- 1C. Zero-Click and No-Contact Spyware Defense ---
+
+WHAT IS ZERO-CLICK SPYWARE?
+Pegasus (NSO Group), Predator (Intellexa), and Reign (QuaDream)
+are commercial surveillance tools sold to governments. They can
+infect a device with absolutely no action from you — no link click,
+no download, nothing. Attack vectors include:
+
+  - Missed or answered phone calls (WhatsApp, regular calls)
+  - Message previews that load silently in the background
+  - Push notifications
+  - AirPlay/network-level injection (CVE-2025-24252 "AirBorne")
+  - Email preview pane rendering (CVE-2025-21298, Outlook OLE)
+  - Compromised messaging apps exploiting zero-day vulnerabilities
+
+Once installed, it can read all messages, activate your microphone
+and camera, steal passwords, track location, and exfiltrate
+everything — while remaining virtually undetectable by antivirus.
+
+WHO IS AT RISK?
+Pegasus specifically targets journalists, activists, executives,
+politicians, and dissidents. If you are not in these categories,
+nation-state-grade Pegasus is unlikely to be aimed at you.
+However, Pegasus-style commercial stalkerware and cheaper
+imitations are increasingly used in domestic abuse, corporate
+espionage, and general crime.
+
+DEFENSE STEPS FOR ZERO-CLICK / NO-CONTACT SPYWARE:
+
+  STEP 1 — Enable Lockdown Mode (iPhone) / Advanced Protection (Android)
+    - iPhone: Settings → Privacy & Security → Lockdown Mode → Turn On
+      This disables many attack surfaces (link previews, FaceTime from
+      strangers, wired accessories, complex web features).
+    - Android Pixel: Settings → Security → Advanced Protection Program
+
+  STEP 2 — Reboot your phone daily
+    Pegasus is often memory-resident. A reboot can clear infections
+    that haven't established full persistence. This was confirmed by
+    Kaspersky's analysis of the Shutdown.log forensic artifact —
+    Pegasus infections leave traces when a reboot interrupts them.
+
+  STEP 3 — Disable iMessage and FaceTime if not needed (iPhone)
+    Historically one of the most exploited zero-click surfaces.
+    Settings → Messages → toggle iMessage OFF if not required.
+    Settings → FaceTime → toggle OFF.
+
+  STEP 4 — Keep ALL apps and OS fully updated immediately
+    Zero-click attacks exploit unpatched vulnerabilities. The window
+    between a patch release and your install is your attack window.
+    Enable automatic updates for iOS, Android, and all apps.
+
+  STEP 5 — Use Signal for sensitive communications
+    Signal has a significantly stronger security record than
+    WhatsApp, Telegram (in default mode), or SMS. Enable
+    "Note to Self" disappearing messages and sealed sender.
+
+  STEP 6 — Audit app permissions aggressively
+    Revoke microphone, camera, and location from every app that
+    does not strictly require it. Check monthly.
+
+  STEP 7 — Never connect to untrusted Wi-Fi networks
+    Network injection attacks (used by Pegasus operators) can
+    deliver payloads through your network traffic. Use a VPN
+    on all untrusted networks (hotel, cafe, airport).
+
+  STEP 8 — Use iVerify or MVT to scan for infection
+    - iVerify (iOS/Android): Commercial tool by Trail of Bits,
+      designed for high-risk individuals. Detects behavioral
+      anomalies consistent with spyware. Available on App Store.
+    - MVT (Mobile Verification Toolkit): Free, open-source tool
+      by Amnesty International. Forensic-grade analysis.
+      GitHub: https://github.com/mvt-project/mvt
+      Requires command-line knowledge. Run after any suspicious event.
+
+  STEP 9 — Physical access = full compromise
+    Commercial stalkerware (FlexiSpy, mSpy, etc.) requires
+    brief physical access to your device to install.
+    - Use a strong biometric + PIN lock. Never leave phone
+      unattended with someone you don't fully trust.
+    - Check Settings → Apps for anything you don't recognize.
+    - On iPhone: Settings → Privacy → check each permission list
+      for apps you didn't install yourself.
+
+  STEP 10 — Consider a dedicated "sensitive comms" device
+    If you are a journalist, activist, or handle sensitive work:
+    use a separate, factory-reset device solely for high-risk
+    communications. Never install third-party apps on it.
+
+HONEST ASSESSMENT:
+Nation-state Pegasus is extremely difficult to fully defeat once
+deployed — it is designed by a well-funded company specifically to
+evade all defenses. These steps significantly raise the cost and
+difficulty of infection and are the current best-practice consensus
+from Amnesty International, Kaspersky GReAT, and Citizen Lab.
+If you have strong reason to believe you are a Pegasus target,
+contact Access Now's Digital Security Helpline:
+https://www.accessnow.org/help/
+
+
+================================================================
+PHASE 2: OS HARDENING (THE BODYGUARD)
+================================================================
+
+Make Windows a hostile environment for malware.
+
+
+--- 1. Enable Core Isolation — Memory Integrity (HVCI) ---
+
+  - Search "Core Isolation" in Windows Start
+  - Toggle Memory Integrity to ON
+  - Restart when prompted
+
+WHY: HVCI uses hardware virtualisation to create a protected
+bubble around the Windows Kernel. Malware cannot inject
+unsigned code into your system's brain even with Admin rights.
+
+
+--- 2. Use a Standard User Account for Daily Work ---
+
+Running as Administrator for everything is extremely dangerous.
+An infected browser running as Admin can silently install
+kernel-level drivers.
+
+  - Settings → Accounts → Family & other users
+  - Add a new account → set as Standard User
+  - Use this for ALL daily work, browsing, and social media
+  - Keep your Admin account only for software installation
+
+
+--- 3. Enable BitLocker Drive Encryption ---
+
+  - Search "Manage BitLocker" in Start → Turn On for C: drive
+  - Save recovery key to a safe OFFLINE location (not same PC)
+
+If your PC is stolen or someone boots from USB, they see nothing
+but encrypted data.
+
+
+--- 4. Keep Windows Update on Automatic ---
+
+  Settings → Windows Update → Advanced Options
+  Enable: "Receive updates for other Microsoft products"
+
+Most successful real-world attacks exploit unpatched systems.
+There is no excuse for being months behind on patches.
+
+
+================================================================
+PHASE 3: THE VAULT — BROWSER ISOLATION (KASM + VIRTUALBOX)
+================================================================
+
+RULE: Never browse your sensitive accounts (Facebook, YouTube,
+banking) directly on your Windows host machine.
+
+
+--- 1. Create the Lab (VirtualBox) ---
+
+  - Download VirtualBox from virtualbox.org and install it
+  - Create a new Linux VM: Ubuntu Server 22.04 LTS recommended
+  - Enable EFI in the VM settings before first boot
+  - Allocate: 4+ GB RAM, 20+ GB storage
+  - After first setup is complete, take a Snapshot → name it "CLEAN"
+
+If you ever click a bad link or suspect infection:
+Restore → CLEAN → the entire browser and any virus is deleted
+from history instantly.
+
+
+--- 2. Install Kasm Workspaces Inside the VM ---
+
+Kasm gives you a fully disposable, streaming browser inside a
+Docker container. Close the tab = everything destroyed.
+
+Run these commands inside your Ubuntu Server VM terminal:
+
+  curl -O https://kasm-static-content.s3.amazonaws.com/kasm_release_1.18.1.tar.gz
+  tar -xf kasm_release_1.18.1.tar.gz
+  sudo bash kasm_release/install.sh --swap-size 4096
+
+
+--- 3. The Workflow ---
+
+  1. Open browser on your Windows host
+  2. Go to https://localhost:3000 (your Kasm dashboard)
+  3. Launch a "Disposable Chrome" workspace
+  4. Do ALL your Facebook/YouTube/sensitive browsing inside Kasm
+  5. Close the tab → entire session + any virus is permanently destroyed
+
+Your Windows host never touches the dangerous content directly.
+
+
+================================================================
+PHASE 4: THE SENTINEL — SYSMON MONITORING
+================================================================
+
+Sysmon is Windows' built-in Security Camera. It logs every
+process, network connection, and registry change.
+
+
+--- 1. Activate Native Sysmon ---
+
+  - Settings → System → Optional Features → More Windows Features
+  - Check the box for Sysmon, click OK
+
+  OR via PowerShell (Admin):
+    Dism /Online /Enable-Feature /FeatureName:Sysmon
+
+  Then open CMD (Admin) and initialise with a config:
+    sysmon -i sysmonconfig.xml
+
+  Download the SwiftOnSecurity config (highly recommended):
+    https://github.com/SwiftOnSecurity/sysmon-config
+
+
+--- 2. Key Event IDs to Watch ---
+
+Open Event Viewer → Applications and Services Logs
+→ Microsoft → Windows → Sysmon
+
+  Event ID 1  → Process Creation
+                Detects unknown executables spawning silently
+  Event ID 3  → Network Connection
+                Detects malware phoning home to C2 servers
+  Event ID 11 → File Created
+                Detects dropper activity writing payloads to disk
+  Event ID 13 → Registry Value Set
+                Detects tampering with Secure Boot or autorun keys
+
+SPECIFIC ALERT: Watch Event ID 13 for entries containing
+"Confignull" or "Regeditnull" — signs something is tampering
+with your boot configuration.
+
+
+--- 3. Optional: Forward to a Free SIEM ---
+
+For dashboards and automated alerting, run Wazuh or Elastic SIEM
+inside your VirtualBox VM and forward Sysmon logs to it.
+This gives you correlation rules without cloud dependency.
+
+
+================================================================
+PHASE 5: ACCOUNT ARMOR — THE NO-BS TRUTH
+================================================================
+
+Modern viruses don't steal passwords.
+They steal SESSION COOKIES.
+Even a perfect password + SMS 2FA is useless if your session
+cookie is stolen. Address this directly.
+
+
+--- 1. Get a YubiKey — THIS IS MANDATORY ---
+
+Even if a virus steals your password AND your session cookie AND
+your SMS 2FA code, it still cannot log in without the physical
+YubiKey in your hand. The key uses FIDO2/WebAuthn cryptographic
+challenges that cannot be phished, replayed, or stolen remotely.
+
+  - Register your YubiKey on Facebook, Google, and YouTube
+  - YubiKey 5 Series: supports FIDO2, U2F, OTP, PIV
+  - Buy a backup key and store it in a safe place
+
+
+--- 2. Clear Cookies Daily (Cookie Auto-Delete) ---
+
+Install the "Cookie Auto-Delete" browser extension.
+Configure it to purge all cookies when a tab closes.
+
+When you close your Kasm browser session, all authenticated
+sessions are killed. Nothing left to steal.
+
+
+--- 3. Zero Cracked Software — Non-Negotiable ---
+
+In 2026, security researchers estimate 99% of cracked software
+packages contain Infostealers or Bootkits. A single cracked
+game can deploy a UEFI bootkit that survives a full format.
+
+If you regularly use cracked software, all other phases
+in this guide are effectively compromised. Period.
+
+
+--- 4. Additional Account Hardening ---
+
+  - Use unique 20+ character passwords for every account
+    (Bitwarden is free and excellent)
+  - Enable FIDO2 passkeys wherever supported (replaces passwords)
+  - Audit active sessions on Facebook/Google monthly
+  - Use a dedicated email for high-value accounts you never share
+  - Enable login notifications on all important accounts
+
+
+================================================================
+MASTER CHECKLIST — WORK THROUGH THIS TOP TO BOTTOM
+================================================================
+
+FIRMWARE
+  [ ] Registry 0x80 patch applied (all 3 reg commands run)
+  [ ] PC restarted twice after applying patch
+  [ ] BIOS Supervisor Password set
+  [ ] Secure Boot enabled in BIOS
+  [ ] TPM 2.0 enabled
+  [ ] USB/network boot disabled in BIOS
+
+ZERO-CLICK / SPYWARE
+  [ ] Phone OS and all apps fully up to date
+  [ ] Lockdown Mode enabled (iPhone) or Advanced Protection (Android Pixel)
+  [ ] Unnecessary iMessage/FaceTime disabled
+  [ ] App permissions audited (mic, camera, location)
+  [ ] iVerify or MVT scan run
+  [ ] VPN on all untrusted networks
+  [ ] Daily reboot habit established for mobile
+
+OS
+  [ ] Memory Integrity (HVCI) ON
+  [ ] Standard User account created and in use for daily work
+  [ ] BitLocker drive encryption active
+  [ ] Windows Update on Automatic
+  [ ] Recovery key stored offline
+
+ISOLATION
+  [ ] VirtualBox VM created
+  [ ] CLEAN snapshot taken
+  [ ] Kasm installed in VM
+  [ ] All FB/YT/sensitive browsing done inside Kasm only
+
+DETECTION
+  [ ] Sysmon enabled and running
+  [ ] SwiftOnSecurity config applied
+  [ ] Event Viewer checked (Event IDs 1, 3, 11, 13)
+
+IDENTITY
+  [ ] YubiKey purchased and registered on all key accounts
+  [ ] Backup YubiKey stored safely
+  [ ] Cookie Auto-Delete installed and configured
+  [ ] Password manager in use (Bitwarden recommended)
+  [ ] Zero cracked/pirated software on system
+  [ ] FIDO2 passkeys enabled where supported
+
+
+================================================================
+THREAT VS DEFENSE MAPPING
+================================================================
+
+  UEFI Bootkit / BlackLotus   → Phase 1A: 0x80 Fix + BIOS Password
+  Kernel Code Injection       → Phase 2: HVCI Memory Integrity
+  Drive-by Browser Malware    → Phase 3: Kasm Disposable Browser
+  Session Cookie Theft        → Phase 3 + Phase 5: Kasm + YubiKey
+  Infostealer from Cracks     → Phase 5: No Cracks Rule
+  Persistent Autorun Malware  → Phase 4: Sysmon Event ID 13 Alert
+  Phishing / Credential Theft → Phase 5: YubiKey FIDO2 (unphishable)
+  Zero-Click Spyware (Pegasus)→ Phase 1C: Lockdown Mode + Patching + MVT
+  Physical Stalkerware        → Phase 1C: Physical security + app audit
+  Network Injection Attack    → Phase 1C: VPN + Phase 3: Kasm isolation
+
+
+================================================================
+USEFUL LINKS
+================================================================
+
+  Amnesty International MVT:   https://github.com/mvt-project/mvt
+  iVerify (iOS/Android):       https://iverify.io
+  SwiftOnSecurity Sysmon:      https://github.com/SwiftOnSecurity/sysmon-config
+  Access Now Digital Helpline: https://www.accessnow.org/help/
+  Bitwarden (Password Mgr):    https://bitwarden.com
+  VirtualBox:                  https://virtualbox.org
+  Kasm Workspaces:             https://kasmweb.com
+  YubiKey:                     https://yubico.com
+
+
+================================================================
+END OF GUIDE — PC Security Defense Guide 2026 Edition
+================================================================
